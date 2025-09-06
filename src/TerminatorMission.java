@@ -295,4 +295,60 @@ final class TerminatorT800 { //КЛАСС ТЕРМИНАТОР
         weapon = new Pistol();
         System.out.println("Взяты: " + vehicle.getType() + " и " + weapon.getType());
     }
+    private PhoneBooth findPhoneBooth() {
+        System.out.println("Поиск телефонной будки...");
+
+        AddressBook addressBook = new AddressBook();
+        addressBook.addAddress("Сара Коннор", "Сансет-бульвар");
+        addressBook.addAddress("Сара Коннор", "Голливуд-бульвар");
+        addressBook.addAddress("Сара Коннор", "Мелроуз-авеню");
+
+        System.out.println("Телефонная будка найдена");
+        return new PhoneBooth(addressBook);
+    }
+
+    private List<String> findAddresses(PhoneBooth phoneBooth) {
+        System.out.println("Поиск в адресной книге...");
+
+        List<String> addresses = phoneBooth.getAddressBook().getAddresses(missionTarget);
+        System.out.println("Найдены адреса для '" + missionTarget + "': " + addresses);
+
+        return addresses;
+    }
+
+    private void findAndKillTarget(List<String> addresses) {
+        System.out.println("Начало поиска цели по адресам...");
+
+        for (String address : addresses) {
+            System.out.println("Проверка адреса: " + address);
+
+            SaraKonor sarah = new SaraKonor("Сара Коннор", 170, 55, address);
+
+            if (isTarget(sarah)) {
+                System.out.println("Цель найдена: " + sarah.getName() + " по адресу: " + address);
+                weapon.use(sarah);
+                return;
+            }
+            System.out.println("Цель не найдена по этому адресу");
+        }
+        System.out.println("Цель не найдена ни по одному адресу");
+    }
+
+    private boolean isTarget(Human human) {
+        return human.getName().equals(missionTarget);
+    }
+
+    private void moveToDestination(String destination) {
+        System.out.println("Перемещение в конечную точку...");
+        vehicle.move(destination);
+    }
 }
+
+public class TerminatorMission {
+    public static void main(String[] args) {
+        TerminatorT800 terminator = new TerminatorT800();
+        terminator.executeMission();
+    }
+}
+
+
